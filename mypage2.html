@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mypage2.html</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        /* 상단바 */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-bar .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .top-bar .logout-btn {
+            padding: 5px 10px;
+            background-color: #FFC0EA;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .top-bar .logout-btn:hover {
+            background-color: #FF8FCA;
+        }
+
+        /* 마이페이지 컨테이너 */
+        .mypage-container {
+            margin-top: 60px;
+            margin-bottom: 60px;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mypage-content {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .mypage-content h2 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .mypage-content h3 {
+            font-size: 18px;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .post-list, .liked-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .post-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+
+        .post-item p {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        /* 하단바 */
+        .bottom-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 10px 0;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .bottom-bar a {
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .bottom-bar span {
+            display: block;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단바 -->
+    <div class="top-bar">
+        <div class="logo">Logo</div>
+        <button class="logout-btn" onclick="logout()">로그아웃</button>
+    </div>
+
+    <!-- 마이페이지 컨텐츠 -->
+    <div class="mypage-container">
+        <div class="mypage-content">
+            <h2 id="user-id">마이페이지</h2>
+            <h3>내가 쓴 글</h3>
+            <div class="post-list" id="my-posts"></div>
+            <h3>찜 목록</h3>
+            <div class="liked-list" id="liked-posts"></div>
+        </div>
+    </div>
+
+    <!-- 하단바 -->
+    <div class="bottom-bar">
+        <a href="index.html"><span>🏠</span></a>
+        <a href="expiry.html"><span>⏰</span></a>
+        <a href="chat.html"><span>💬</span></a>
+        <a href="mypage2.html"><span>👤</span></a>
+    </div>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('loggedInUser');
+            window.location.href = "login.html";
+        }
+
+        window.onload = function() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                // 로그인 안 된 경우 login.html로 리디렉션
+                window.location.href = "login.html";
+                return;
+            }
+
+            // 사용자 아이디 표시
+            document.getElementById('user-id').textContent = `${loggedInUser}님의 마이페이지`;
+
+            // marketProducts 데이터 가져오기
+            const products = JSON.parse(localStorage.getItem('marketProducts') || '[]');
+
+            // 내가 쓴 글
+            const myPosts = products.filter(p => p.userId === loggedInUser);
+            const myPostsContainer = document.getElementById('my-posts');
+            if (myPosts.length > 0) {
+                myPostsContainer.innerHTML = myPosts.map(p => `
+                    <div class="post-item">
+                        <p><strong>${p.title}</strong></p>
+                        <p>가격: ${p.price}원</p>
+                        <p>소비기한: ${p.expiryDate}</p>
+                    </div>
+                `).join('');
+            } else {
+                myPostsContainer.innerHTML = '<p>작성한 글이 없습니다.</p>';
+            }
+
+            // 찜 목록
+            const likedPosts = products.filter(p => p.liked);
+            const likedPostsContainer = document.getElementById('liked-posts');
+            if (likedPosts.length > 0) {
+                likedPostsContainer.innerHTML = likedPosts.map(p => `
+                    <div class="post-item">
+                        <p><strong>${p.title}</strong> (작성자: ${p.userId})</p>
+                        <p>가격: ${p.price}원</p>
+                        <p>소비기한: ${p.expiryDate}</p>
+                    </div>
+                `).join('');
+            } else {
+                likedPostsContainer.innerHTML = '<p>찜한 글이 없습니다.</p>';
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login.html</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        /* 로그인 컨테이너 */
+        .login-container {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-form h2 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .login-form label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .login-form button {
+            padding: 10px;
+            background-color: #FFC0EA;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .login-form button:hover {
+            background-color: #FF8FCA;
+        }
+
+        .signup-link {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .signup-link a {
+            color: #FFC0EA;
+            text-decoration: none;
+        }
+
+        .signup-link a:hover {
+            color: #FF8FCA;
+        }
+    </style>
+</head>
+<body>
+    <!-- 로그인 폼 -->
+    <div class="login-container">
+        <form class="login-form" onsubmit="login(event)">
+            <h2>로그인</h2>
+            <div>
+                <label for="user-id">아이디</label>
+                <input type="text" id="user-id" placeholder="아이디를 입력하세요" required>
+            </div>
+            <div>
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+            <button type="submit">로그인</button>
+            <div class="signup-link">
+                계정이 없으신가요? <a href="signup.html">회원가입</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function login(event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+            const userId = document.getElementById('user-id').value;
+            const password = document.getElementById('password').value;
+
+            // 로컬 스토리지에서 사용자 데이터 가져오기
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.userId === userId && u.password === password);
+
+            if (user) {
+                // 로그인 성공 시 loggedInUser 저장
+                localStorage.setItem('loggedInUser', userId);
+                window.location.href = "index.html"; // 성공 시 index.html로 이동
+            } else {
+                alert("아이디 또는 비밀번호가 잘못되었습니다.");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>post1.html</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* 상단바 */
+        .top-bar {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-bar .back-btn {
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .top-bar .title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        /* 등록 폼 */
+        .post-container {
+            margin-top: 60px;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .post-form {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .post-form label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .post-form input[type="text"],
+        .post-form input[type="date"],
+        .post-form input[type="number"],
+        .post-form input[type="file"],
+        .post-form select,
+        .post-form textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .post-form textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .post-form .image-preview {
+            max-width: 100px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .post-form button {
+            padding: 10px;
+            background-color: #FFC0EA;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .post-form button:hover {
+            background-color: #FF8FCA;
+        }
+
+        /* 하단바 */
+        .bottom-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 10px 0;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .bottom-bar a {
+            text-align: center;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .bottom-bar span {
+            display: block;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 상단바 -->
+    <div class="top-bar">
+        <span class="back-btn" onclick="goBack()">⬅️</span>
+        <div class="title">판매 등록</div>
+    </div>
+
+    <!-- 상품 등록 폼 -->
+    <div class="post-container">
+        <form class="post-form" onsubmit="submitPost(event)">
+            <div>
+                <label for="user-id">아이디</label>
+                <input type="text" id="user-id" placeholder="아이디를 입력하세요" required>
+            </div>
+            <div>
+                <label for="product-image">사진 첨부</label>
+                <input type="file" id="product-image" accept="image/*">
+                <img id="image-preview" class="image-preview" alt="미리보기">
+            </div>
+            <div>
+                <label for="product-title">제목</label>
+                <input type="text" id="product-title" placeholder="상품 제목을 입력하세요" required>
+            </div>
+            <div>
+                <label for="category">카테고리</label>
+                <select id="category" required>
+                    <option value="food">식료품</option>
+                    <option value="cosmetics">화장품</option>
+                    <option value="others">기타</option>
+                </select>
+            </div>
+            <div>
+                <label for="product-description">본문</label>
+                <textarea id="product-description" placeholder="상품 설명을 입력하세요" required></textarea>
+            </div>
+            <div>
+                <label for="expiry-date">소비기한</label>
+                <input type="date" id="expiry-date" required>
+            </div>
+            <div>
+                <label for="price">가격 (원)</label>
+                <input type="number" id="price" placeholder="가격을 입력하세요" min="0" step="100" required>
+            </div>
+            <button type="submit">등록</button>
+        </form>
+    </div>
+
+    <!-- 하단바 -->
+    <div class="bottom-bar">
+        <a href="index.html">
+            <span>🏠</span>
+        </a>
+        <a href="expiry.html">
+            <span>⏰</span>
+        </a>
+        <a href="chat.html">
+            <span>💬</span>
+        </a>
+        <a href="mypage.html">
+            <span>👤</span>
+        </a>
+    </div>
+
+    <script>
+        // 뒤로가기
+        function goBack() {
+            window.location.href = "index.html";
+        }
+
+        // 사진 미리보기
+        document.getElementById('product-image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('image-preview');
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        // 폼 제출 및 데이터 저장
+        function submitPost(event) {
+            event.preventDefault();
+            const imageFile = document.getElementById('product-image').files[0];
+            const product = {
+                userId: document.getElementById('user-id').value,
+                title: document.getElementById('product-title').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('product-description').value,
+                expiryDate: document.getElementById('expiry-date').value,
+                price: document.getElementById('price').value,
+                liked: false // 찜 상태 기본값
+            };
+
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    product.image = reader.result; // base64 이미지 데이터
+                    saveAndRedirect(product);
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                product.image = '없음';
+                saveAndRedirect(product);
+            }
+        }
+
+        function saveAndRedirect(product) {
+            let products = JSON.parse(localStorage.getItem('marketProducts') || '[]');
+            products.push(product);
+            localStorage.setItem('marketProducts', JSON.stringify(products));
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

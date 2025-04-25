@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>signup.html</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        /* 회원가입 컨테이너 */
+        .signup-container {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signup-form {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .signup-form h2 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .signup-form label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .signup-form input[type="text"],
+        .signup-form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .signup-form button {
+            padding: 10px;
+            background-color: #FFC0EA;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .signup-form button:hover {
+            background-color: #FF8FCA;
+        }
+
+        .login-link {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .login-link a {
+            color: #FFC0EA;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            color: #FF8FCA;
+        }
+    </style>
+</head>
+<body>
+    <!-- 회원가입 폼 -->
+    <div class="signup-container">
+        <form class="signup-form" onsubmit="signup(event)">
+            <h2>회원가입</h2>
+            <div>
+                <label for="user-id">아이디</label>
+                <input type="text" id="user-id" placeholder="아이디를 입력하세요" required>
+            </div>
+            <div>
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" placeholder="비밀번호를 입력하세요" required>
+            </div>
+            <div>
+                <label for="confirm-password">비밀번호 확인</label>
+                <input type="password" id="confirm-password" placeholder="비밀번호를 다시 입력하세요" required>
+            </div>
+            <button type="submit">회원가입</button>
+            <div class="login-link">
+                이미 계정이 있으신가요? <a href="login.html">로그인</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function signup(event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+            const userId = document.getElementById('user-id').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // 비밀번호 일치 확인
+            if (password !== confirmPassword) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return;
+            }
+
+            // 로컬 스토리지에 사용자 데이터 저장 (임시)
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userExists = users.some(u => u.userId === userId);
+            if (userExists) {
+                alert("이미 존재하는 아이디입니다.");
+                return;
+            }
+
+            const newUser = { userId, password };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            alert("회원가입이 완료되었습니다!");
+            window.location.href = "login.html"; // 로그인 페이지로 이동
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>expiry.html</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { display: flex; flex-direction: column; min-height: 100vh; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background-color: #fff; border-bottom: 1px solid #ddd; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .top-bar .logo { font-size: 20px; font-weight: bold; color: #333; }
+        .content { margin-top: 60px; margin-bottom: 60px; flex: 1; padding: 20px; text-align: center; }
+        .bottom-bar { display: flex; justify-content: center; gap: 40px; padding: 10px 0; background-color: #fff; border-top: 1px solid #ddd; position: fixed; bottom: 0; width: 100%; z-index: 1000; }
+        .bottom-bar a { text-align: center; text-decoration: none; color: #333; }
+        .bottom-bar span { display: block; font-size: 24px; }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="logo">Logo</div>
+    </div>
+
+    <div class="content">
+        <h2>소비기한 관리</h2>
+        <p>여기에 소비기한 관련 기능이 들어갑니다.</p>
+    </div>
+
+    <div class="bottom-bar">
+        <a href="index.html"><span>🏠</span></a>
+        <a href="expiry.html"><span>⏰</span></a>
+        <a href="chat.html"><span>💬</span></a>
+        <a href="mypage2.html"><span>👤</span></a>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                alert("로그인이 필요합니다.");
+                window.location.href = "mypage.html";
+            }
+        };
+    </script>
+</body>
+</html>
